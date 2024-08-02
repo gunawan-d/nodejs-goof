@@ -7,8 +7,7 @@ pipeline {
         stage('Pull source code') {
             steps {
                 echo 'Pull Code'
-                git url: 'https://github.com/gunawan-d/nodejs-goof.git'
-                sh 'npm install'
+                sh 'git pull https://github.com/gunawan-d/nodejs-goof.git'
             }
         }
         stage('Build Docker Image and Push to Docker Registry') {
