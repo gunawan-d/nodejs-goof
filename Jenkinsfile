@@ -1,8 +1,7 @@
 pipeline {
-    agent none
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
-    }
     stages {
         stage('Pull source code') {
             steps {
@@ -17,6 +16,7 @@ pipeline {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 sh 'docker push gunawand/nodejsgoof:0.1'
             }
+        }
         }
     }
 }
