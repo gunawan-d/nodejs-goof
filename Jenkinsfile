@@ -1,25 +1,24 @@
-pipeline {
-    agent none
+pipeline
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
     stages {
-        stage('Build dockerfile') {
+        stage('Build Docker') {
             agent {
                 docker {
                     image 'node:lts-buster-slim'
-                    args '-u root:root' // Menjalankan sebagai root untuk menghindari masalah perizinan
                 }
             }
             steps {
                 sh 'npm install'
             }
         }
-        stage('Push to Docker Registry Docker Hub') {
+        stage('Build Docker Image and Push to Docker Registry') {
             agent {
                 docker {
-                    image 'docker:stable'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    image 'docker:dind'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             environment {
@@ -28,17 +27,15 @@ pipeline {
                 DOCKER_TAG = 'latest'
                 REGISTRY_CREDENTIALS_ID = 'DockerLogin'
             }
+            // steps {
+            //     script {
+            //         docker.withRegistry("https://${DOCKER_REGISTRY}", "${REGISTRY_CREDENTIALS_ID}") {
+            //             sh 'docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} .'
+            //             sh 'docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}'
             steps {
-                script {
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", "${REGISTRY_CREDENTIALS_ID}") {
-                        sh 'docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} .'
-                        sh 'docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}'
-                    }
-                }
+                sh 'docker build -t gunawand/nodejsgoof:01 .'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
     }
-    triggers {
-        githubPush()
-    }
-}
