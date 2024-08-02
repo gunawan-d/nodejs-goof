@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
@@ -15,21 +15,16 @@ pipeline {
             }
         }
         stage('Build Docker Image and Push to Docker Registry') {
-            agent any
-            environment {
-                DOCKER_REGISTRY = 'hub.docker.com'
-                DOCKER_IMAGE = 'gunawan-d/nodejs-goof' // Ganti dengan nama repository Docker kamu
-                DOCKER_TAG = 'latest'
-                REGISTRY_CREDENTIALS_ID = 'DockerLogin'
+            agent {
+                docker {
+                    image 'docker:dind'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+                }
             }
             steps {
-                script {
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", "${REGISTRY_CREDENTIALS_ID}") {
-                        sh 'docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} .'
-                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                        sh 'docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}'
-                    }
-                }
+                sh 'docker build -t gunawand/nodejsgoof:0.1 .'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
     }
