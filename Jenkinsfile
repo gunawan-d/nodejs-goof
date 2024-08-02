@@ -2,14 +2,13 @@ pipeline {
     agent none
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
-        // SNYK_CREDENTIALS = credentials('SnykToken')
-        // SONARQUBE_CREDENTIALS = credentials('SonarToken')
     }
     stages {
         stage('Build dockerfile') {
             agent {
                 docker {
                     image 'node:lts-buster-slim'
+                    args '-u root:root'
                 }
             }
             steps {
@@ -37,7 +36,6 @@ pipeline {
                     }
                 }
             }
-
         }
     }
 }
