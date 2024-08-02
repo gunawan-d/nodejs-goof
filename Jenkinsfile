@@ -8,7 +8,7 @@ pipeline {
             agent {
                 docker {
                     image 'node:lts-buster-slim'
-                    args '-u root:root'
+                    args '-u root:root' // Menjalankan sebagai root untuk menghindari masalah perizinan
                 }
             }
             steps {
@@ -24,7 +24,7 @@ pipeline {
             }
             environment {
                 DOCKER_REGISTRY = 'hub.docker.com'
-                DOCKER_IMAGE = '${{ github.repository }}'
+                DOCKER_IMAGE = 'gunawan-d/nodejs-goof' // name image
                 DOCKER_TAG = 'latest'
                 REGISTRY_CREDENTIALS_ID = 'DockerLogin'
             }
@@ -37,5 +37,8 @@ pipeline {
                 }
             }
         }
+    }
+    triggers {
+        githubPush()
     }
 }
