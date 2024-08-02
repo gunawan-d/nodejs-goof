@@ -24,7 +24,7 @@ pipeline {
             }
             environment {
                 DOCKER_REGISTRY = 'hub.docker.com'
-                DOCKER_IMAGE = 'gunawan-d/nodejs-goof' // name image
+                DOCKER_IMAGE = 'gunawan-d/nodejs-goof' // Ganti dengan nama repository Docker kamu
                 DOCKER_TAG = 'latest'
                 REGISTRY_CREDENTIALS_ID = 'DockerLogin'
             }
