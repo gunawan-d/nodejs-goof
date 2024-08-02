@@ -1,6 +1,10 @@
 pipeline {
+    agent none
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
+    }
     stages {
-        stage('Build') {
+       stage('Build') {
             agent {
                 docker {
                     image 'node:lts-buster-slim'
@@ -24,18 +28,7 @@ pipeline {
             }
         }
     }
+    triggers {
+        githubPush()
+    }
 }
-// pipeline {
-//     agent {
-//         docker {
-//             image 'node:lts-buster-slim'
-//         }
-//     }
-//     stages {
-//         stage('Test Docker Connection') {
-//             steps {
-//                 sh 'docker --version'
-//             }
-//         }
-//     }
-// }
