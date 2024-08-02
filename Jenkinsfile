@@ -18,8 +18,5 @@ pipeline {
                 sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
-    triggers {
-        githubPush()
     }
 }
-
