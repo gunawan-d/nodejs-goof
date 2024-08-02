@@ -8,7 +8,7 @@ pipeline {
             agent {
                 docker {
                     image 'node:lts-buster-slim'
-                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
