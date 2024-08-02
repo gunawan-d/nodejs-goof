@@ -1,7 +1,5 @@
 pipeline {
     agent none
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
     stages {
        stage('Build') {
@@ -28,7 +26,4 @@ pipeline {
             }
         }
     }
-    triggers {
-        githubPush()
-    }
-}
+
