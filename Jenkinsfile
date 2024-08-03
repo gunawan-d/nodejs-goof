@@ -40,7 +40,7 @@ pipeline {
                 archiveArtifacts artifacts: 'trivy-scan-dockerfile-report.json'
             }
         }
-        stage('Build NPM') {
+        // stage('Build NPM') {
         //     agent {
         //         docker {
         //             image 'node:lts-buster-slim' // Use Node.js Docker image
