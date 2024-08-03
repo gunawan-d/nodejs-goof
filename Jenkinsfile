@@ -4,17 +4,21 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
     stages {
-        stage('Pull source code') {
+        stage('Build npm') {
+            agent {
+                docker {
+                    image 'node:lts-buster-slim'
+                }
+            }
             steps {
-                echo 'Pull Code'
-                sh 'git pull https://github.com/gunawan-d/nodejs-goof.git'
+                sh 'npm install'
             }
         }
         stage('Build Docker Image and Push to Docker Registry') {
             agent {
                 docker {
                     image 'docker:dind'
-                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
