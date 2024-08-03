@@ -1,31 +1,30 @@
 pipeline {
-    agent none
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
     stages {
-        stage('Build') {
-            agent {
-                docker {
-                    image 'node:lts-buster-slim'
-                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
+        stage('Pull Source Code') {
             steps {
-                sh 'npm install'
+                sh 'git clone https://github.com/gunawan-d/nodejs-goof.git'
+                dir('nodejs-goof') {
+                    sh 'npm install'
+                }
             }
         }
         stage('Build Docker Image and Push to Docker Registry') {
             agent {
                 docker {
                     image 'docker:dind'
-                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
-                sh 'docker build -t gunawand/nodejsgoof:0.1 .'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker push gunawand/nodejsgoof:0.1'
+                dir('nodejs-goof') {
+                    sh 'docker build -t gunawand/nodejsgoof:0.1 .'
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh 'docker push gunawand/nodejsgoof:0.1'
+                }
             }
         }
     }
