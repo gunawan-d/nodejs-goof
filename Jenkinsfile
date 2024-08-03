@@ -4,11 +4,22 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
     stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:lts-buster-slim'
+                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
+                sh 'npm install'
+            }
+        }
         stage('Build Docker Image and Push to Docker Registry') {
             agent {
                 docker {
                     image 'docker:dind'
-                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
