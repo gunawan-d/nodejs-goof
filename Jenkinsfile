@@ -4,7 +4,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
     stages {
-        stage('Build npm') {
+        stage('Build') {
             agent {
                 docker {
                     image 'node:lts-buster-slim'
