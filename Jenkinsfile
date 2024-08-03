@@ -4,12 +4,20 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
     }
     stages {
-        stage('Pull Source Code') {
+        stage('Checkout Code') {
             steps {
-                sh 'git clone https://github.com/gunawan-d/nodejs-goof.git'
-                dir('nodejs-goof') {
-                    sh 'npm install'
+                checkout scm
+            }
+        }
+        stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'node:lts-buster-slim' // Use Node.js Docker image
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                 }
+            }
+            steps {
+                sh 'npm install'
             }
         }
         stage('Build Docker Image and Push to Docker Registry') {
@@ -20,11 +28,9 @@ pipeline {
                 }
             }
             steps {
-                dir('nodejs-goof') {
-                    sh 'docker build -t gunawand/nodejsgoof:0.1 .'
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                    sh 'docker push gunawand/nodejsgoof:0.1'
-                }
+                sh 'docker build -t gunawand/nodejsgoof:0.1 .'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
     }
