@@ -26,21 +26,6 @@ pipeline {
                 archiveArtifacts artifacts: 'trufflehog-scan-result.json'
             }
     	}
-        stage('SCA Snyk Test') {
-            agent {
-              docker {
-                  image 'snyk/snyk:node'
-                  args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
-              }
-            }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'snyk test --json > snyk-scan-report.json'
-                }
-                sh 'cat snyk-scan-report.json'
-                archiveArtifacts artifacts: 'snyk-scan-report.json'
-            }
-        }
         stage('SCA Trivy Scan Dockerfile') {
             agent {
               docker {
@@ -67,6 +52,21 @@ pipeline {
         //         sh 'npm install'
         //     }
         // }
+        stage('SAST Snyk') {
+            agent {
+              docker {
+                  image 'snyk/snyk:node'
+                  args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
+              }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'snyk code test --json > snyk-sast-report.json'
+                }
+                sh 'cat snyk-scan-report.json'
+                archiveArtifacts artifacts: 'snyk-sast-report.json'
+            }
+        }
         stage('Build Docker Image') {
             agent {
                 docker {
