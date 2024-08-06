@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
-        SNYK_CREDENTIALS = credentials('SnykToken')
+        SNYK_TOKEN = credentials('snyk-api-token')
     }
     stages {
         stage('Checkout Code') {
