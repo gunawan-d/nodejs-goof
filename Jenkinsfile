@@ -60,11 +60,14 @@ pipeline {
               }
             }
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'snyk code test --json > snyk-sast-report.json'
+                withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        sh 'snyk auth $SNYK_TOKEN'
+                        sh 'snyk code test --json > snyk-sast-report.json'
+                    }
+                    sh 'cat snyk-sast-report.json'
+                    archiveArtifacts artifacts: 'snyk-sast-report.json'
                 }
-                sh 'cat snyk-scan-report.json'
-                archiveArtifacts artifacts: 'snyk-sast-report.json'
             }
         }
         stage('Build Docker Image') {
