@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
+        SNYK_CREDENTIALS = credentials('SnykToken')
     }
     stages {
         stage('Checkout Code') {
@@ -66,7 +67,7 @@ pipeline {
         //         sh 'npm install'
         //     }
         // }
-        stage('Build Docker Image and Push to Docker Registry') {
+        stage('Build Docker Image') {
             agent {
                 docker {
                     image 'docker:dind'
@@ -75,6 +76,16 @@ pipeline {
             }
             steps {
                 sh 'docker build -t gunawand/nodejsgoof:0.1 .'
+            }
+        }
+        stage('Push Docker Image To CR') {
+            agent {
+                docker {
+                    image 'docker:dind'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 sh 'docker push gunawand/nodejsgoof:0.1'
             }
