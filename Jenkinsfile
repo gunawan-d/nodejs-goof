@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
         SNYK_TOKEN = credentials('snyk-api-token')
-        SONARQUBE_CREDENTIALS = credentials('SonarToken')
+        SONARQUBE_CREDENTIALS_PSW = credentials('SONARQUBE_CREDENTIALS_PSW')
     }
     stages {
         stage('Checkout Code') {
