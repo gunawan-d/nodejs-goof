@@ -11,21 +11,6 @@ pipeline {
                 checkout scm
             }
         }
-        stage('SCA Snyk Test') {
-            agent {
-                docker {
-                    image 'snyk/snyk:node'
-                    args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
-                }
-            }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'snyk test --json > snyk-scan-report.json'
-                }
-                sh 'cat snyk-scan-report.json'
-                archiveArtifacts artifacts: 'snyk-scan-report.json'
-            }
-        }
         stage('Secret Scanning Using Trufflehog'){
             agent {
                 docker {
@@ -55,6 +40,21 @@ pipeline {
                 }
                 sh 'cat trivy-scan-dockerfile-report.json'
                 archiveArtifacts artifacts: 'trivy-scan-dockerfile-report.json'
+            }
+        }
+        stage('SCA Snyk Test') {
+            agent {
+                docker {
+                    image 'snyk/snyk:node'
+                    args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'snyk test --json > snyk-scan-report.json'
+                }
+                sh 'cat snyk-scan-report.json'
+                archiveArtifacts artifacts: 'snyk-scan-report.json'
             }
         }
         // stage('Build NPM') {
@@ -95,8 +95,9 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW' 
+                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW -Dsonar.scanner.dumpToFile=sonar-report.json'
                 }
+                archiveArtifacts artifacts: 'sonar-report.json'
             }
         }
         stage('Build Docker Image') {
