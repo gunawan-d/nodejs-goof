@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
         SNYK_TOKEN = credentials('snyk-api-token')
+        SONARQUBE_CREDENTIALS = credentials('SonarToken')
     }
     stages {
         stage('Checkout Code') {
@@ -82,6 +83,19 @@ pipeline {
                     }
                     sh 'cat snyk-sast-report.json'
                     archiveArtifacts artifacts: 'snyk-sast-report.json'
+                }
+            }
+        }
+        stage('SAST SonarQube') {
+            agent {
+              docker {
+                  image 'sonarsource/sonar-scanner-cli:latest'
+                  args '--network host -v ".:/usr/src" --entrypoint='
+              }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW' 
                 }
             }
         }
