@@ -89,15 +89,14 @@ pipeline {
         }
         stage('SAST SonarQube') {
             agent {
-              docker {
-                  image 'sonarsource/sonar-scanner-cli:latest'
-                  args '--network host -v ".:/usr/src" --entrypoint='
-              }
+                docker {
+                    image 'sonarsource/sonar-scanner-cli:latest'
+                    args '--network host -v ".:/usr/src" --entrypoint='
+                }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW  -Dsonar.scanner.dumpToFile=sonar-report.json' 
-                    // sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW -Dsonar.scanner.dumpToFile=sonar-report.json'
+                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://localhost:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW'
                 }
                 archiveArtifacts artifacts: 'sonar-report.json'
             }
@@ -134,7 +133,7 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'zap-baseline.py -t http://147.139.166.250:3001 -r zapbaseline.html -x zapbaseline.xml'
+                    sh 'zap-baseline.py -t http://localhost:3001 -r zapbaseline.html -x zapbaseline.xml'
                 }
                 sh 'cp /zap/wrk/zapbaseline.html ./zapbaseline.html'
                 sh 'cp /zap/wrk/zapbaseline.xml ./zapbaseline.xml'
