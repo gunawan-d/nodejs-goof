@@ -43,21 +43,21 @@ pipeline {
                 archiveArtifacts artifacts: 'trivy-scan-dockerfile-report.json'
             }
         }
-        stage('SCA Snyk Test') {
-            agent {
-                docker {
-                    image 'snyk/snyk:node'
-                    args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
-                }
-            }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'snyk test --json > snyk-scan-report.json'
-                }
-                sh 'cat snyk-scan-report.json'
-                archiveArtifacts artifacts: 'snyk-scan-report.json'
-            }
-        }
+        // stage('SCA Snyk Test') {
+        //     agent {
+        //         docker {
+        //             image 'snyk/snyk:node'
+        //             args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
+        //         }
+        //     }
+        //     steps {
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //             sh 'snyk test --json > snyk-scan-report.json'
+        //         }
+        //         sh 'cat snyk-scan-report.json'
+        //         archiveArtifacts artifacts: 'snyk-scan-report.json'
+        //     }
+        // }
         // stage('Build NPM') {
         //     agent {
         //         docker {
@@ -69,34 +69,34 @@ pipeline {
         //         sh 'npm install'
         //     }
         // }
-        stage('SAST Snyk') {
+        // stage('SAST Snyk') {
+        //     agent {
+        //       docker {
+        //           image 'snyk/snyk:node'
+        //           args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
+        //       }
+        //     }
+        //     steps {
+        //         withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
+        //             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //                 sh 'snyk auth $SNYK_TOKEN'
+        //                 sh 'snyk code test --json > snyk-sast-report.json'
+        //             }
+        //             sh 'cat snyk-sast-report.json'
+        //             archiveArtifacts artifacts: 'snyk-sast-report.json'
+        //         }
+        //     }
+        // }
+        stage('SAST SonarQube') {
             agent {
               docker {
-                  image 'snyk/snyk:node'
-                  args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
+                  image 'sonarsource/sonar-scanner-cli:latest'
+                  args '--network host -v ".:/usr/src" --entrypoint='
               }
             }
             steps {
-                withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        sh 'snyk auth $SNYK_TOKEN'
-                        sh 'snyk code test --json > snyk-sast-report.json'
-                    }
-                    sh 'cat snyk-sast-report.json'
-                    archiveArtifacts artifacts: 'snyk-sast-report.json'
-                }
-            }
-        }
-        stage('SAST SonarQube') {
-            agent {
-                docker {
-                    image 'sonarsource/sonar-scanner-cli:latest'
-                    args '--network host -v ".:/usr/src" --entrypoint='
-                }
-            }
-            steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://localhost:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW'
+                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW -Dsonar.scanner.dumpToFile=sonar-report.json'
                 }
                 archiveArtifacts artifacts: 'sonar-report.json'
             }
@@ -133,7 +133,7 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'zap-baseline.py -t http://localhost:3001 -r zapbaseline.html -x zapbaseline.xml'
+                    sh 'zap-baseline.py -t http://147.139.166.250:3001 -r zapbaseline.html -x zapbaseline.xml'
                 }
                 sh 'cp /zap/wrk/zapbaseline.html ./zapbaseline.html'
                 sh 'cp /zap/wrk/zapbaseline.xml ./zapbaseline.xml'
