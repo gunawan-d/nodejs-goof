@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
         SNYK_TOKEN = credentials('snyk-api-token')
+        SONARQUBE_CREDENTIALS = credentials('SonarToken')
         SONARQUBE_CREDENTIALS_PSW = credentials('SONARQUBE_CREDENTIALS_PSW')
     }
     stages {
@@ -95,7 +96,8 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW -Dsonar.scanner.dumpToFile=sonar-report.json'
+                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW  -Dsonar.scanner.dumpToFile=sonar-report.json' 
+                    // sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW -Dsonar.scanner.dumpToFile=sonar-report.json'
                 }
                 archiveArtifacts artifacts: 'sonar-report.json'
             }
@@ -123,20 +125,22 @@ pipeline {
                 sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
-        stage('DAST Nuclei') {
+        stage('DAST OWASP ZAP') {
             agent {
                 docker {
-                    image 'projectdiscovery/nuclei'
-                    args '--user root --network host --entrypoint='
+                    image 'ghcr.io/zaproxy/zaproxy:stable'
+                    args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
                 }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'nuclei -u http://147.139.166.250:3001 -nc -j > nuclei-report.json'
-                    sh 'cat nuclei-report.json'
+                    sh 'zap-baseline.py -t http://147.139.166.250:3001 -r zapbaseline.html -x zapbaseline.xml'
                 }
-                archiveArtifacts artifacts: 'nuclei-report.json'
+                sh 'cp /zap/wrk/zapbaseline.html ./zapbaseline.html'
+                sh 'cp /zap/wrk/zapbaseline.xml ./zapbaseline.xml'
+                archiveArtifacts artifacts: 'zapbaseline.html'
+                archiveArtifacts artifacts: 'zapbaseline.xml'
             }
-       }
+        }
     }
 }
