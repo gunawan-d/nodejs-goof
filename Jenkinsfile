@@ -22,6 +22,7 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh 'trufflehog filesystem . --exclude-paths trufflehog-excluded-paths.txt --fail --json --no-update > trufflehog-scan-result.json'
                 }
+                // sh 'trufflehog filesystem . --exclude-paths trufflehog-excluded-paths.txt --fail --json --no-update > trufflehog-scan-result.json'
                 sh 'cat trufflehog-scan-result.json'
                 archiveArtifacts artifacts: 'trufflehog-scan-result.json'
             }
@@ -98,7 +99,7 @@ pipeline {
                 }
             }
         }
-        stage('Build & Push Docker image') {
+        stage('Build Docker Image') {
             agent {
                 docker {
                     image 'docker:dind'
@@ -107,27 +108,19 @@ pipeline {
             }
             steps {
                 sh 'docker build -t gunawand/nodejsgoof:0.1 .'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
-        stage('Deploy Docker') {
+        stage('Push Docker Image To CR') {
             agent {
                 docker {
-                    image 'kroniak/ssh-client'
+                    image 'docker:dind'
                     args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DeploymentSSHUserPass', usernameVariable: 'SSH_USER', passwordVariable: 'SSH_PASS')]) {
-                    sh '''
-                    sshpass -p $SSH_PASS ssh -o StrictHostKeyChecking=no -p 8022 $SSH_USER@147.139.166.250 docker pull gunawand/nodejsgoof:0.1
-                    sshpass -p $SSH_PASS ssh -o StrictHostKeyChecking=no -p 8022 $SSH_USER@147.139.166.250 docker rm --force mongodb
-                    sshpass -p $SSH_PASS ssh -o StrictHostKeyChecking=no -p 8022 $SSH_USER@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3
-                    sshpass -p $SSH_PASS ssh -o StrictHostKeyChecking=no -p 8022 $SSH_USER@147.139.166.250 docker rm --force nodejsgoof
-                    sshpass -p $SSH_PASS ssh -o StrictHostKeyChecking=no -p 8022 $SSH_USER@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1
-                    '''
-                }
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push gunawand/nodejsgoof:0.1'
+                sleep time: 60, unit: 'SECONDS'
             }
         }
         stage('DAST OWASP ZAP') {
