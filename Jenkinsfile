@@ -3,7 +3,6 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
         SNYK_TOKEN = credentials('snyk-api-token')
-        // SONARQUBE_CREDENTIALS = credentials('SonarToken')
         SONARQUBE_CREDENTIALS_PSW = credentials('SONARQUBE_CREDENTIALS_PSW')
     }
     stages {
@@ -23,7 +22,6 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh 'trufflehog filesystem . --exclude-paths trufflehog-excluded-paths.txt --fail --json --no-update > trufflehog-scan-result.json'
                 }
-                // sh 'trufflehog filesystem . --exclude-paths trufflehog-excluded-paths.txt --fail --json --no-update > trufflehog-scan-result.json'
                 sh 'cat trufflehog-scan-result.json'
                 archiveArtifacts artifacts: 'trufflehog-scan-result.json'
             }
@@ -100,7 +98,7 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
+        stage('Build & Push Docker image') {
             agent {
                 docker {
                     image 'docker:dind'
@@ -109,19 +107,27 @@ pipeline {
             }
             steps {
                 sh 'docker build -t gunawand/nodejsgoof:0.1 .'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
-        stage('Push Docker Image To CR') {
+        stage('Deploy Docker') {
             agent {
                 docker {
-                    image 'docker:dind'
+                    image 'kroniak/ssh-client'
                     args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker push gunawand/nodejsgoof:0.1'
+                withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
+                }
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 cicd@147.139.166.250 docker pull gunawand/nodejsgoof:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 cicd@147.139.166.250 docker rm --force mongodb'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 cicd@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 cicd@147.139.166.250 docker rm --force nodejsgoof'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 cicd@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1'
             }
+           
         }
         stage('DAST OWASP ZAP') {
             agent {
