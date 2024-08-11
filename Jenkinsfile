@@ -131,12 +131,12 @@ pipeline {
             }
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no devops@147.139.166.250 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no devops@147.139.166.250 docker pull gunawand/nodejsgoof:0.1'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no devops@147.139.166.250 docker rm --force mongodb'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no devops@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no devops@147.139.166.250 docker rm --force nodejsgoof'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no devops@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker pull gunawand/nodejsgoof:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force mongodb'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force nodejsgoof'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1'
                 }
             }
         }
