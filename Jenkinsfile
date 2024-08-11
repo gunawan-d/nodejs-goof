@@ -122,39 +122,54 @@ pipeline {
                 sh 'docker push gunawand/nodejsgoof:0.1'
             }
         }
-        stage('Deploy Docker Image') {
+        // stage('Deploy Docker Image') {
+        //     agent {
+        //         docker {
+        //             image 'kroniak/ssh-client'
+        //             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+        //         }
+        //     }
+        //     steps {
+        //         withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
+        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
+        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker pull gunawand/nodejsgoof:0.1'
+        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force mongodb'
+        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3'
+        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force nodejsgoof'
+        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1'
+        //         }
+        //     }
+        // }
+        // stage('DAST OWASP ZAP') {
+        //     agent {
+        //         docker {
+        //             image 'ghcr.io/zaproxy/zaproxy:stable'
+        //             args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
+        //         }
+        //     }
+        //     steps {
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //             sh 'zap-baseline.py -t http://147.139.166.250:3001 -r zapbaseline.html -x zapbaseline.xml'
+        //         }
+        //         sh 'cp /zap/wrk/zapbaseline.html ./zapbaseline.html'
+        //         sh 'cp /zap/wrk/zapbaseline.xml ./zapbaseline.xml'
+        //         archiveArtifacts artifacts: 'zapbaseline.html'
+        //         archiveArtifacts artifacts: 'zapbaseline.xml'
+        //     }
+        // }
+        stage('DAST Nuclei') {
             agent {
                 docker {
-                    image 'kroniak/ssh-client'
-                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker pull gunawand/nodejsgoof:0.1'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force mongodb'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force nodejsgoof'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1'
-                }
-            }
-        }
-        stage('DAST OWASP ZAP') {
-            agent {
-                docker {
-                    image 'ghcr.io/zaproxy/zaproxy:stable'
-                    args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
+                    image 'projectdiscovery/nuclei'
+                    args '--user root --network host --entrypoint='
                 }
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'zap-baseline.py -t http://147.139.166.250:3001 -r zapbaseline.html -x zapbaseline.xml'
+                    sh 'nuclei -u http://147.139.166.250:3001 -nc -j > nuclei-report.json'
+                    sh 'cat nuclei-report.json'
                 }
-                sh 'cp /zap/wrk/zapbaseline.html ./zapbaseline.html'
-                sh 'cp /zap/wrk/zapbaseline.xml ./zapbaseline.xml'
-                archiveArtifacts artifacts: 'zapbaseline.html'
-                archiveArtifacts artifacts: 'zapbaseline.xml'
+                archiveArtifacts artifacts: 'nuclei-report.json'
             }
         }
     }
