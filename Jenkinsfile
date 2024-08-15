@@ -92,36 +92,36 @@ pipeline {
                 sh 'docker build -t gunawand/nodejsgoof:0.1 .'
             }
         }
-        // stage('Push Docker Image To CR') {
-        //     agent {
-        //         docker {
-        //             image 'docker:dind'
-        //             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-        //         }
-        //     }
-        //     steps {
-        //         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-        //         sh 'docker push gunawand/nodejsgoof:0.1'
-        //     }
-        // }
-        // stage('Deploy Docker Image') {
-        //     agent {
-        //         docker {
-        //             image 'kroniak/ssh-client'
-        //             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-        //         }
-        //     }
-        //     steps {
-        //         withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
-        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
-        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker pull gunawand/nodejsgoof:0.1'
-        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force mongodb'
-        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3'
-        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force nodejsgoof'
-        //             sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1'
-        //         }
-        //     }
-        // }
+        stage('Push Docker Image To CR') {
+            agent {
+                docker {
+                    image 'docker:dind'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push gunawand/nodejsgoof:0.1'
+            }
+        }
+        stage('Deploy Docker Image') {
+            agent {
+                docker {
+                    image 'kroniak/ssh-client'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker pull gunawand/nodejsgoof:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force mongodb'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run --detach --name mongodb -p 27017:27017 mongo:3'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker rm --force nodejsgoof'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no -p 8022 devops@147.139.166.250 docker run -it --detach --name nodejsgoof --network host gunawand/nodejsgoof:0.1'
+                }
+            }
+        }
         // // stage('DAST OWASP ZAP') {
         // //     agent {
         // //         docker {
@@ -139,20 +139,20 @@ pipeline {
         // //         archiveArtifacts artifacts: 'zapbaseline.xml'
         // //     }
         // // }
-        // stage('DAST Nuclei') {
-        //     agent {
-        //         docker {
-        //             image 'projectdiscovery/nuclei'
-        //             args '--user root --network host --entrypoint='
-        //         }
-        //     }
-        //     steps {
-        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-        //             sh 'nuclei -u http://147.139.166.250:3001 -nc -j > nuclei-report.json'
-        //             sh 'cat nuclei-report.json'
-        //         }
-        //         archiveArtifacts artifacts: 'nuclei-report.json'
-        //     }
-        // }
+        stage('DAST Nuclei') {
+            agent {
+                docker {
+                    image 'projectdiscovery/nuclei'
+                    args '--user root --network host --entrypoint='
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'nuclei -u http://147.139.166.250:3001 -nc -j > nuclei-report.json'
+                    sh 'cat nuclei-report.json'
+                }
+                archiveArtifacts artifacts: 'nuclei-report.json'
+            }
+        }
     }
 }
