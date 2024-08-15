@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <OWASPZAPReport programName="ZAP" version="2.15.0" generated="Wed, 31 Jul 2024 13:02:03">
 	
-		<site name="http://localhost:3001" host="localhost" port="3001" ssl="false">
+		<site name="http://147.139.166.250:3001" host="147.139.166.250" port="3001" ssl="false">
 			<alerts>
 				
 					<alertitem>
@@ -17,7 +17,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -27,7 +27,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -41,7 +41,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -51,7 +51,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -65,7 +65,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/edit/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/edit/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -75,7 +75,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/edit/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/edit/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -111,7 +111,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -121,7 +121,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -131,7 +131,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/edit/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/edit/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -141,7 +141,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/about.html</uri>
+									<uri>http://147.139.166.250:3001/public/about.html</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -151,7 +151,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/robots.txt</uri>
+									<uri>http://147.139.166.250:3001/robots.txt</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -161,7 +161,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/sitemap.xml</uri>
+									<uri>http://147.139.166.250:3001/sitemap.xml</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -171,7 +171,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/import</uri>
+									<uri>http://147.139.166.250:3001/import</uri>
 									<method>POST</method>
 									<param></param>
 									<attack></attack>
@@ -203,7 +203,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param>x-frame-options</param>
 									<attack></attack>
@@ -213,7 +213,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param>x-frame-options</param>
 									<attack></attack>
@@ -223,7 +223,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/edit/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/edit/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param>x-frame-options</param>
 									<attack></attack>
@@ -233,7 +233,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/about.html</uri>
+									<uri>http://147.139.166.250:3001/public/about.html</uri>
 									<method>GET</method>
 									<param>x-frame-options</param>
 									<attack></attack>
@@ -243,7 +243,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/import</uri>
+									<uri>http://147.139.166.250:3001/import</uri>
 									<method>POST</method>
 									<param>x-frame-options</param>
 									<attack></attack>
@@ -275,7 +275,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param>connect.sid</param>
 									<attack></attack>
@@ -285,7 +285,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param>connect.sid</param>
 									<attack></attack>
@@ -295,7 +295,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/robots.txt</uri>
+									<uri>http://147.139.166.250:3001/robots.txt</uri>
 									<method>GET</method>
 									<param>connect.sid</param>
 									<attack></attack>
@@ -305,7 +305,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/sitemap.xml</uri>
+									<uri>http://147.139.166.250:3001/sitemap.xml</uri>
 									<method>GET</method>
 									<param>connect.sid</param>
 									<attack></attack>
@@ -337,7 +337,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param>http://html5shiv.googlecode.com/svn/trunk/html5.js</param>
 									<attack></attack>
@@ -347,7 +347,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param>http://html5shiv.googlecode.com/svn/trunk/html5.js</param>
 									<attack></attack>
@@ -357,7 +357,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/edit/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/edit/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param>http://html5shiv.googlecode.com/svn/trunk/html5.js</param>
 									<attack></attack>
@@ -389,7 +389,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -399,7 +399,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -409,7 +409,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/destroy/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/destroy/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -419,7 +419,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/edit/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/edit/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -429,7 +429,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/about.html</uri>
+									<uri>http://147.139.166.250:3001/public/about.html</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -439,7 +439,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/css/screen.css</uri>
+									<uri>http://147.139.166.250:3001/public/css/screen.css</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -449,7 +449,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/images/snyk_patch.jpeg</uri>
+									<uri>http://147.139.166.250:3001/public/images/snyk_patch.jpeg</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -459,7 +459,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/robots.txt</uri>
+									<uri>http://147.139.166.250:3001/robots.txt</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -469,7 +469,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/sitemap.xml</uri>
+									<uri>http://147.139.166.250:3001/sitemap.xml</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
@@ -479,7 +479,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/create</uri>
+									<uri>http://147.139.166.250:3001/create</uri>
 									<method>POST</method>
 									<param></param>
 									<attack></attack>
@@ -489,7 +489,7 @@
 							
 							
 								<instance>
-									<uri>http://localhost:3001/import</uri>
+									<uri>http://147.139.166.250:3001/import</uri>
 									<method>POST</method>
 									<param></param>
 									<attack></attack>
@@ -521,7 +521,7 @@
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param>x-content-type-options</param>
 									<attack></attack>
@@ -532,7 +532,7 @@ At &quot;High&quot; threshold this scan rule will not alert on client or server 
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param>x-content-type-options</param>
 									<attack></attack>
@@ -543,7 +543,7 @@ At &quot;High&quot; threshold this scan rule will not alert on client or server 
 							
 							
 								<instance>
-									<uri>http://localhost:3001/edit/66aa2f2b55fba4904853d5cc</uri>
+									<uri>http://147.139.166.250:3001/edit/66aa2f2b55fba4904853d5cc</uri>
 									<method>GET</method>
 									<param>x-content-type-options</param>
 									<attack></attack>
@@ -554,7 +554,7 @@ At &quot;High&quot; threshold this scan rule will not alert on client or server 
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/about.html</uri>
+									<uri>http://147.139.166.250:3001/public/about.html</uri>
 									<method>GET</method>
 									<param>x-content-type-options</param>
 									<attack></attack>
@@ -565,7 +565,7 @@ At &quot;High&quot; threshold this scan rule will not alert on client or server 
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/css/screen.css</uri>
+									<uri>http://147.139.166.250:3001/public/css/screen.css</uri>
 									<method>GET</method>
 									<param>x-content-type-options</param>
 									<attack></attack>
@@ -576,7 +576,7 @@ At &quot;High&quot; threshold this scan rule will not alert on client or server 
 							
 							
 								<instance>
-									<uri>http://localhost:3001/public/images/snyk_patch.jpeg</uri>
+									<uri>http://147.139.166.250:3001/public/images/snyk_patch.jpeg</uri>
 									<method>GET</method>
 									<param>x-content-type-options</param>
 									<attack></attack>
@@ -587,7 +587,7 @@ At &quot;High&quot; threshold this scan rule will not alert on client or server 
 							
 							
 								<instance>
-									<uri>http://localhost:3001/import</uri>
+									<uri>http://147.139.166.250:3001/import</uri>
 									<method>POST</method>
 									<param>x-content-type-options</param>
 									<attack></attack>
@@ -620,65 +620,65 @@ At &quot;High&quot; threshold this scan rule will not alert on client or server 
 						<instances>
 							
 								<instance>
-									<uri>http://localhost:3001</uri>
+									<uri>http://147.139.166.250:3001</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
 									<evidence></evidence>
 									<otherinfo>The origin domain used for comparison was:
-localhost
+147.139.166.250
 connect.sid=s%3A8brclEFaVbiQQqP9dyrpTYmfH4NtY7uV.IA4JWlSbXAlc76ApvlTNq0SGmwTqtuvz4mXs6WHZqsc
 </otherinfo>
 								</instance>
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
 									<evidence></evidence>
 									<otherinfo>The origin domain used for comparison was:
-localhost
+147.139.166.250
 connect.sid=s%3A4H68GnJ76Nln_phB0Yx_5D8KKPzJbkBS.%2FA7IONSNO6ZCRzkOBCKkGCXMNLCk5YugxwcAo5cUzGU
 </otherinfo>
 								</instance>
 							
 							
 								<instance>
-									<uri>http://localhost:3001/</uri>
+									<uri>http://147.139.166.250:3001/</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
 									<evidence></evidence>
 									<otherinfo>The origin domain used for comparison was:
-localhost
+147.139.166.250
 connect.sid=s%3AwYhd9FtT-QVsZ_2chthmD3IAWbCD9quN.3%2FChfADMnQo%2Btcwix%2FvceRB6GAbH4Ou7acWIM9vCYZ0
 </otherinfo>
 								</instance>
 							
 							
 								<instance>
-									<uri>http://localhost:3001/robots.txt</uri>
+									<uri>http://147.139.166.250:3001/robots.txt</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
 									<evidence></evidence>
 									<otherinfo>The origin domain used for comparison was:
-localhost
+147.139.166.250
 connect.sid=s%3Ap_mWPquidgrHTL0xuvX_ot7Le2oBDoXK.dPPRXEZiSoitu7gF7HBkEVvDC13UG0ITXVZvZW8yf9g
 </otherinfo>
 								</instance>
 							
 							
 								<instance>
-									<uri>http://localhost:3001/sitemap.xml</uri>
+									<uri>http://147.139.166.250:3001/sitemap.xml</uri>
 									<method>GET</method>
 									<param></param>
 									<attack></attack>
 									<evidence></evidence>
 									<otherinfo>The origin domain used for comparison was:
-localhost
+147.139.166.250
 connect.sid=s%3AyFvnPFZLFrpsqwoC6jxxaiBWlUlsbwTt.817pHVtMAFPH1zrQHNSUFn3brbeTOosS6TjUfndvN5M
 </otherinfo>
 								</instance>
@@ -686,7 +686,7 @@ connect.sid=s%3AyFvnPFZLFrpsqwoC6jxxaiBWlUlsbwTt.817pHVtMAFPH1zrQHNSUFn3brbeTOos
 						</instances>
 						<count>5</count>
 						<solution>&lt;p&gt;Always scope cookies to a FQDN (Fully Qualified Domain Name).&lt;/p&gt;</solution>
-						<otherinfo>&lt;p&gt;The origin domain used for comparison was:&lt;/p&gt;&lt;p&gt;localhost&lt;/p&gt;&lt;p&gt;connect.sid=s%3A8brclEFaVbiQQqP9dyrpTYmfH4NtY7uV.IA4JWlSbXAlc76ApvlTNq0SGmwTqtuvz4mXs6WHZqsc&lt;/p&gt;&lt;p&gt;&lt;/p&gt;</otherinfo>
+						<otherinfo>&lt;p&gt;The origin domain used for comparison was:&lt;/p&gt;&lt;p&gt;147.139.166.250&lt;/p&gt;&lt;p&gt;connect.sid=s%3A8brclEFaVbiQQqP9dyrpTYmfH4NtY7uV.IA4JWlSbXAlc76ApvlTNq0SGmwTqtuvz4mXs6WHZqsc&lt;/p&gt;&lt;p&gt;&lt;/p&gt;</otherinfo>
 						<reference>&lt;p&gt;https://tools.ietf.org/html/rfc6265#section-4.1&lt;/p&gt;&lt;p&gt;https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes.html&lt;/p&gt;&lt;p&gt;https://code.google.com/p/browsersec/wiki/Part2#Same-origin_policy_for_cookies&lt;/p&gt;</reference>
 						<cweid>565</cweid>
 						<wascid>15</wascid>

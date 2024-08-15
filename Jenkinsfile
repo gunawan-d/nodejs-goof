@@ -122,23 +122,23 @@ pipeline {
         //         }
         //     }
         // }
-        // // stage('DAST OWASP ZAP') {
-        // //     agent {
-        // //         docker {
-        // //             image 'ghcr.io/zaproxy/zaproxy:stable'
-        // //             args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
-        // //         }
-        // //     }
-        // //     steps {
-        // //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-        // //             sh 'zap-baseline.py -t http://147.139.166.250:3001 -r zapbaseline.html -x zapbaseline.xml'
-        // //         }
-        // //         sh 'cp /zap/wrk/zapbaseline.html ./zapbaseline.html'
-        // //         sh 'cp /zap/wrk/zapbaseline.xml ./zapbaseline.xml'
-        // //         archiveArtifacts artifacts: 'zapbaseline.html'
-        // //         archiveArtifacts artifacts: 'zapbaseline.xml'
-        // //     }
-        // // }
+        stage('DAST OWASP ZAP') {
+            agent {
+                docker {
+                    image 'ghcr.io/zaproxy/zaproxy:stable'
+                    args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'zap-baseline.py -t http://147.139.166.250:3001 -r zapbaseline.html -x zapbaseline.xml'
+                }
+                sh 'cp /zap/wrk/zapbaseline.html ./zapbaseline.html'
+                sh 'cp /zap/wrk/zapbaseline.xml ./zapbaseline.xml'
+                archiveArtifacts artifacts: 'zapbaseline.html'
+                archiveArtifacts artifacts: 'zapbaseline.xml'
+            }
+        }
         stage('DAST Nuclei') {
             agent {
                 docker {
