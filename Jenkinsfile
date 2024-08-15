@@ -68,30 +68,30 @@ pipeline {
         // // //         sh 'npm install'
         // // //     }
         // // // }
-        // stage('SAST SonarQube') {
-        //     agent {
-        //       docker {
-        //           image 'sonarsource/sonar-scanner-cli:latest'
-        //           args '--network host -v ".:/usr/src" --entrypoint='
-        //       }
-        //     }
-        //     steps {
-        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-        //             sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW' 
-        //         }
-        //     }
-        // }
-        // stage('Build Docker Image') {
-        //     agent {
-        //         docker {
-        //             image 'docker:dind'
-        //             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-        //         }
-        //     }
-        //     steps {
-        //         sh 'docker build -t gunawand/nodejsgoof:0.1 .'
-        //     }
-        // }
+        stage('SAST SonarQube') {
+            agent {
+              docker {
+                  image 'sonarsource/sonar-scanner-cli:latest'
+                  args '--network host -v ".:/usr/src" --entrypoint='
+              }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'sonar-scanner -Dsonar.projectKey=nodejs-goof -Dsonar.qualitygate.wait=true -Dsonar.sources=. -Dsonar.host.url=http://147.139.166.250:9009 -Dsonar.token=$SONARQUBE_CREDENTIALS_PSW' 
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            agent {
+                docker {
+                    image 'docker:dind'
+                    args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
+                sh 'docker build -t gunawand/nodejsgoof:0.1 .'
+            }
+        }
         // stage('Push Docker Image To CR') {
         //     agent {
         //         docker {
