@@ -68,24 +68,6 @@ pipeline {
         // // //         sh 'npm install'
         // // //     }
         // // // }
-        // // // stage('SAST Snyk') {
-        // // //     agent {
-        // // //       docker {
-        // // //           image 'snyk/snyk:node'
-        // // //           args '-u root --network host --env SNYK_TOKEN=$SNYK_CREDENTIALS_PSW --entrypoint='
-        // // //       }
-        // // //     }
-        // // //     steps {
-        // // //         withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
-        // // //             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-        // // //                 sh 'snyk auth $SNYK_TOKEN'
-        // // //                 sh 'snyk code test --json > snyk-sast-report.json'
-        // // //             }
-        // // //             sh 'cat snyk-sast-report.json'
-        // // //             archiveArtifacts artifacts: 'snyk-sast-report.json'
-        // // //         }
-        // // //     }
-        // // // }
         // stage('SAST SonarQube') {
         //     agent {
         //       docker {
