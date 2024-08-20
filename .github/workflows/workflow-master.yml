@@ -14,7 +14,9 @@ jobs:
     - name: Secret Scanning
       uses: trufflesecurity/trufflehog@main
       with:
-        extra_args: trufflehog git file://. --since-commit HEAD --only-verified --fail
+        args: --entrypoint=
+        run: |
+          sh trufflehog filesystem . --exclude-paths trufflehog-excluded-paths.txt --fail --json --no-update > trufflehog-scan-result.json
     # # Setting up Docker Builder
     # - name: Set up Docker Builder
     #   uses: docker/setup-buildx-action@v2
