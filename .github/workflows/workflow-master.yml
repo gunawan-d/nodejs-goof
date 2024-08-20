@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # Checkout Branch
+    # List files to debug
+    - name: List workspace files
+      run: ls -al ${{ github.workspace }}
+
     # Run TruffleHog inside Docker container
     - name: Secret Scanning with TruffleHog
       run: |
