@@ -17,11 +17,11 @@ jobs:
     - name: Secret Scanning with TruffleHog
       run: |
         docker run --rm \
-          -v ${{ github.workspace }}:/workspace \
-          -w /workspace \
-          trufflesecurity/trufflehog:latest filesystem . \
-          --exclude-paths /workspace/trufflehog-excluded-paths.txt \
-          --fail --json --no-update > trufflehog-scan-result.json
+        -v ${{ github.workspace }}:/workspace \
+        -w /workspace \
+        trufflesecurity/trufflehog:latest filesystem . \
+        --exclude-paths /workspace/trufflehog-excluded-paths.txt \
+        --fail --json --no-update > /workspace/trufflehog-scan-result.json
 
     # Archive the TruffleHog JSON result as an artifact
     - name: Archive TruffleHog Scan Result
