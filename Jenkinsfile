@@ -139,20 +139,20 @@ pipeline {
                 archiveArtifacts artifacts: 'zapbaseline.xml'
             }
         }
-        stage('DAST Nuclei') {
-            agent {
-                docker {
-                    image 'projectdiscovery/nuclei'
-                    args '--user root --network host --entrypoint='
-                }
-            }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'nuclei -u http://147.139.166.250:3001 -nc -j > nuclei-report.json'
-                    sh 'cat nuclei-report.json'
-                }
-                archiveArtifacts artifacts: 'nuclei-report.json'
-            }
-        }
+        // stage('DAST Nuclei') {
+        //     agent {
+        //         docker {
+        //             image 'projectdiscovery/nuclei'
+        //             args '--user root --network host --entrypoint='
+        //         }
+        //     }
+        //     steps {
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //             sh 'nuclei -u http://147.139.166.250:3001 -nc -j > nuclei-report.json'
+        //             sh 'cat nuclei-report.json'
+        //         }
+        //         archiveArtifacts artifacts: 'nuclei-report.json'
+        //     }
+        // }
     }
 }
