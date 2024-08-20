@@ -21,7 +21,7 @@ jobs:
         -w /workspace \
         trufflesecurity/trufflehog:latest filesystem . \
         --exclude-paths /workspace/trufflehog-excluded-paths.txt \
-        --fail --json --no-update > /workspace/trufflehog-scan-result.json
+        --fail --json --no-update > ${{ github.workspace }}/trufflehog-scan-result.json
 
     # Archive the TruffleHog JSON result as an artifact
     - name: Archive TruffleHog Scan Result
