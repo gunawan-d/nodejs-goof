@@ -7,29 +7,31 @@ on:
 jobs:
   secret-scanning:
     runs-on: ubuntu-latest
-    continue-on-error: true
+    continue-on-error: false
     steps:
     - uses: actions/checkout@v3
-    # Checkout Branch
-    # List files to debug
+
+
+    # Run TruffleHog inside Docker container
     - name: Secret Scanning with TruffleHog
       run: |
-        set +e  # Allow the script to continue even if TruffleHog fails
         docker run --rm \
-          -v ${{ github.workspace }}:/workspace \
-          -w /workspace \
-          trufflesecurity/trufflehog:latest filesystem . \
-          --exclude-paths trufflehog-excluded-paths.txt \
-          --fail --json --no-update > ${{ github.workspace }}/trufflehog-scan-result.json
-        set -e  # Re-enable the exit on error behavior
+        -v ${{ github.workspace }}:/workspace \
+        -w /workspace \
+        trufflesecurity/trufflehog:latest filesystem . \
+        --exclude-paths trufflehog-excluded-paths.txt \
+        --fail --json --no-update > ${{ github.workspace }}/trufflehog-scan-result.json
 
+    # List files to debug
+    - name: List workspace files
+      run: ls -al ${{ github.workspace }}
+      
     # Archive the TruffleHog JSON result as an artifact
     - name: Archive TruffleHog Scan Result
-      if: always()  # Ensure this step always runs
       uses: actions/upload-artifact@v3
       with:
         name: trufflehog-scan-result
-        path: ${{ github.workspace }}/trufflehog-scan-result.json
+        path: ./trufflehog-scan-result.json
     # - uses: actions/checkout@v3
 
     # - name: Secret Scanning
