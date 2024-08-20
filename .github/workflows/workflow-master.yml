@@ -17,11 +17,12 @@ jobs:
         args: --entrypoint=
         run: |
           sh trufflehog filesystem . --exclude-paths trufflehog-excluded-paths.txt --fail --json --no-update > trufflehog-scan-result.json
-    - name: Archive log
-      uses: actions/upload-artifact@v4
+          
+    - name: Archive TruffleHog Scan Result
+      uses: actions/upload-artifact@v3
       with:
-        name: trufflehog-scan-result.json
-        path: trufflehog-scan-result.json
+        name: trufflehog-scan-result
+        path: ./trufflehog-scan-result.json
     # # Setting up Docker Builder
     # - name: Set up Docker Builder
     #   uses: docker/setup-buildx-action@v2
