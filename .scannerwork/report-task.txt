@@ -1,0 +1,6 @@
+projectKey=nodejs-goof
+serverUrl=https://sonar.edufund.co.id
+serverVersion=10.7.0.96327
+dashboardUrl=https://sonar.edufund.co.id/dashboard?id=nodejs-goof
+ceTaskId=d27d9fd3-d538-49ca-97f4-5ae1bf5b1835
+ceTaskUrl=https://sonar.edufund.co.id/api/ce/task?id=d27d9fd3-d538-49ca-97f4-5ae1bf5b1835
