@@ -12,7 +12,7 @@
 # ENTRYPOINT ["npm", "start"]
 
 # Use an official Node.js image
-FROM node:18.20.4
+FROM node:18.20.7
 
 # Create a directory for the application
 RUN mkdir /usr/src/goof
